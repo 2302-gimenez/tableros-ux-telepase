@@ -1,7 +1,7 @@
 "use client";
 
 import { Ley } from "@/lib/data";
-import { Registro } from "@/lib/storage";
+import { capturasDe, Registro } from "@/lib/storage";
 import Captura from "./Captura";
 
 interface Props {
@@ -11,8 +11,9 @@ interface Props {
 }
 
 export default function TarjetaLey({ ley, registro, onCambio }: Props) {
+  const capturas = capturasDe(registro);
   const completa = Boolean(
-    registro?.cumple && registro?.explicacion?.trim() && registro?.captura
+    registro?.cumple && registro?.explicacion?.trim() && capturas.length
   );
 
   return (
@@ -35,34 +36,43 @@ export default function TarjetaLey({ ley, registro, onCambio }: Props) {
         {ley.preguntaGuia}
       </p>
 
-      <div className="mb-4 flex gap-2">
-        {(
-          [
-            ["cumple", "✓ Cumple", "border-emerald-600 bg-emerald-600 text-white"],
-            ["rompe", "✗ Rompe", "border-red-600 bg-red-600 text-white"],
-          ] as const
-        ).map(([valor, etiqueta, activo]) => (
-          <button
-            key={valor}
-            type="button"
-            onClick={() =>
-              onCambio({ cumple: registro?.cumple === valor ? null : valor })
-            }
-            className={`rounded-lg border px-4 py-2 text-sm font-semibold transition-colors ${
-              registro?.cumple === valor
-                ? activo
-                : "border-slate-300 bg-white text-slate-600 hover:bg-slate-50"
-            }`}
-          >
-            {etiqueta}
-          </button>
-        ))}
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <div className="flex gap-2">
+          {(
+            [
+              ["cumple", "✓ Cumple", "border-emerald-600 bg-emerald-600 text-white"],
+              ["rompe", "✗ Rompe", "border-red-600 bg-red-600 text-white"],
+            ] as const
+          ).map(([valor, etiqueta, activo]) => (
+            <button
+              key={valor}
+              type="button"
+              onClick={() =>
+                onCambio({ cumple: registro?.cumple === valor ? null : valor })
+              }
+              className={`rounded-lg border px-4 py-2 text-sm font-semibold transition-colors ${
+                registro?.cumple === valor
+                  ? activo
+                  : "border-slate-300 bg-white text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              {etiqueta}
+            </button>
+          ))}
+        </div>
+        <input
+          type="text"
+          value={registro?.pantalla ?? ""}
+          onChange={(e) => onCambio({ pantalla: e.target.value }, false)}
+          placeholder="Pantalla o flujo analizado (ej.: pago de saldo)"
+          className="min-w-52 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+        />
       </div>
 
       <div className="mb-4">
         <Captura
-          valor={registro?.captura}
-          onCambio={(captura) => onCambio({ captura })}
+          lista={capturas}
+          onCambio={(lista) => onCambio({ capturas: lista, captura: null })}
         />
       </div>
 

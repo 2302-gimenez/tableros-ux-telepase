@@ -32,6 +32,26 @@ Registro de los prompts usados para construir los tableros de evaluación de ley
 
 ---
 
+## Prompt 2 — Mejoras: anotación de capturas, resumen ejecutivo y multi-captura
+
+**Herramienta de IA usada:** Claude Code (Claude Fable 5).
+
+**Objetivo del prompt:** pedirle a la IA ideas para mejorar la herramienta y que implemente las elegidas. Antes preguntamos si la app debía evaluar automáticamente lo subido; la IA aclaró que no: la consigna pide una herramienta de documentación donde el juicio (cumple/rompe, severidad) es del equipo, y que automatizar el análisis iría contra el objetivo pedagógico de la tarea.
+
+**Prompt completo (texto exacto):**
+
+> pregunta, la idea de la webapp era que yo decida que cumple y que no o que la misma app cuando le subis algo lo decida?
+
+> hay algo que se te ocurra para mejorarla en algo? Para que se mas intuitiva o incluso mas automatica, o lo que sea
+
+**Resultado y ajustes:**
+
+- La IA propuso cinco mejoras (anotar capturas, resumen ejecutivo en el informe, merge de respaldos JSON, campo pantalla/flujo, multi-captura) y elegimos tres: **anotar capturas**, **resumen ejecutivo** y **campo pantalla/flujo + multi-captura**.
+- Implementó: un editor para dibujar recuadros y flechas rojas sobre la captura y señalar el punto exacto de la interfaz (con deshacer y "quitar marcas", que restaura la imagen original); un resumen ejecutivo al inicio del informe (leyes cumplidas/rotas, heurísticas con problemas, catástrofes, y una tabla con la severidad de las 10 heurísticas); un campo "pantalla o flujo analizado" en cada tarjeta; y soporte para varias capturas por tarjeta, manteniendo compatibilidad con los respaldos del formato anterior.
+- **Ajustes:** en esta iteración no hubo errores de compilación; la IA verificó todo en el navegador (dibujó una anotación real con el mouse, recargó para confirmar la persistencia y revisó el resumen del informe) antes de hacer el deploy.
+
+---
+
 ## Cómo seguir registrando prompts
 
 Si usamos más prompts para ajustar los tableros o cargar el análisis, agregarlos acá con el mismo formato: **herramienta, objetivo, prompt completo (texto exacto) y resultado/ajustes**.

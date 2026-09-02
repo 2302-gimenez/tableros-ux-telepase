@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { HEURISTICAS, LEYES, PRODUCTO } from "@/lib/data";
+import { capturasDe } from "@/lib/storage";
 import { useRegistros } from "@/lib/useRegistros";
 
 export default function Inicio() {
@@ -9,12 +10,12 @@ export default function Inicio() {
 
   const leyesDocumentadas = LEYES.filter((l) => {
     const r = registros[`ley-${l.id}`];
-    return r?.cumple && r?.explicacion?.trim() && r?.captura;
+    return r?.cumple && r?.explicacion?.trim() && capturasDe(r).length;
   }).length;
 
   const heuristicasEvaluadas = HEURISTICAS.filter((h) => {
     const r = registros[`heu-${h.id}`];
-    return r?.severidad != null && r?.explicacion?.trim() && r?.captura;
+    return r?.severidad != null && r?.explicacion?.trim() && capturasDe(r).length;
   }).length;
 
   return (

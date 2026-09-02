@@ -2,6 +2,7 @@
 
 import TarjetaHeuristica from "@/components/TarjetaHeuristica";
 import { HEURISTICAS, PRODUCTO } from "@/lib/data";
+import { capturasDe } from "@/lib/storage";
 import { useRegistros } from "@/lib/useRegistros";
 
 export default function TableroHeuristicas() {
@@ -9,7 +10,7 @@ export default function TableroHeuristicas() {
 
   const evaluadas = HEURISTICAS.filter((h) => {
     const r = registros[`heu-${h.id}`];
-    return r?.severidad != null && r?.explicacion?.trim() && r?.captura;
+    return r?.severidad != null && r?.explicacion?.trim() && capturasDe(r).length;
   }).length;
 
   return (

@@ -2,6 +2,7 @@
 
 import TarjetaLey from "@/components/TarjetaLey";
 import { LEYES, PRODUCTO } from "@/lib/data";
+import { capturasDe } from "@/lib/storage";
 import { useRegistros } from "@/lib/useRegistros";
 
 export default function TableroLeyes() {
@@ -9,7 +10,7 @@ export default function TableroLeyes() {
 
   const documentadas = LEYES.filter((l) => {
     const r = registros[`ley-${l.id}`];
-    return r?.cumple && r?.explicacion?.trim() && r?.captura;
+    return r?.cumple && r?.explicacion?.trim() && capturasDe(r).length;
   }).length;
 
   return (

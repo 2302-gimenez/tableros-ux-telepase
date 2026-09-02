@@ -1,7 +1,7 @@
 "use client";
 
 import { Heuristica, SEVERIDADES } from "@/lib/data";
-import { Registro } from "@/lib/storage";
+import { capturasDe, Registro } from "@/lib/storage";
 import Captura from "./Captura";
 
 interface Props {
@@ -15,10 +15,11 @@ export default function TarjetaHeuristica({
   registro,
   onCambio,
 }: Props) {
+  const capturas = capturasDe(registro);
   const completa = Boolean(
     registro?.severidad != null &&
       registro?.explicacion?.trim() &&
-      registro?.captura
+      capturas.length
   );
 
   return (
@@ -77,9 +78,19 @@ export default function TarjetaHeuristica({
       </fieldset>
 
       <div className="mb-4">
+        <input
+          type="text"
+          value={registro?.pantalla ?? ""}
+          onChange={(e) => onCambio({ pantalla: e.target.value }, false)}
+          placeholder="Pantalla o flujo analizado (ej.: pago de saldo)"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+        />
+      </div>
+
+      <div className="mb-4">
         <Captura
-          valor={registro?.captura}
-          onCambio={(captura) => onCambio({ captura })}
+          lista={capturas}
+          onCambio={(lista) => onCambio({ capturas: lista, captura: null })}
         />
       </div>
 

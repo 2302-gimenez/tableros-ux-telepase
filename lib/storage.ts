@@ -1,12 +1,26 @@
 // Persistencia local con IndexedDB (las capturas como dataURL no entran en localStorage).
 
+export interface CapturaImg {
+  img: string; // dataURL mostrado (puede tener anotaciones quemadas)
+  orig?: string; // dataURL sin anotaciones, para restaurar
+}
+
 export interface Registro {
   id: string;
   cumple?: "cumple" | "rompe" | null; // tablero de leyes
   severidad?: number | null; // tablero de heurísticas
+  pantalla?: string; // pantalla o flujo analizado
   explicacion: string;
-  captura?: string | null; // dataURL
+  captura?: string | null; // formato viejo: una sola captura
+  capturas?: CapturaImg[];
   actualizado: number;
+}
+
+// Compatibilidad con respaldos del formato viejo (campo `captura` único).
+export function capturasDe(r: Registro | undefined): CapturaImg[] {
+  if (!r) return [];
+  if (r.capturas?.length) return r.capturas;
+  return r.captura ? [{ img: r.captura }] : [];
 }
 
 const DB_NAME = "tableros-ux-telepase";
